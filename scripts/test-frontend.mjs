@@ -151,8 +151,8 @@ export async function testFrontend({ page, browser, dispatch, base, ui, root, ou
   await mobile.addInitScript(()=>localStorage.setItem("hpp.preferences",JSON.stringify({autoNext:false})));
   await mobile.goto(ui+"tests/plugins.html");
   await mobile.waitForFunction(()=>document.querySelector("video")?.currentTime>.2);
-  const nav=mobile.locator(".hg-tabbar");assert.equal(await nav.locator("svg").count(),0);
-  assert.equal(await nav.locator("div").first().evaluate(e=>e.clientHeight),40);
+  const nav=mobile.locator(".hg-tabbar");assert.equal(await nav.locator("svg").count(),4);
+  assert.equal(await nav.locator("div").first().evaluate(e=>e.clientHeight),56);
   await mobile.screenshot({animations:"disabled",path:join(output,"restored-mobile-home.png")});
   const touch=await context.newCDPSession(mobile);
   const tap=async(x,y)=>{await touch.send("Input.dispatchTouchEvent",{type:"touchStart",touchPoints:[{x,y}]});await touch.send("Input.dispatchTouchEvent",{type:"touchEnd",touchPoints:[]});};
@@ -202,5 +202,5 @@ export async function testFrontend({ page, browser, dispatch, base, ui, root, ou
   assert.equal(await nav.count(),0);
   await mobile.setViewportSize({width:320,height:680});assert(await mobile.locator(".legacy-settings").evaluate(e=>e.scrollWidth<=innerWidth));
   assert.deepEqual(mobileErrors,[]);await context.close();
-  report.passed.push("Mobile 40px text navigation, clean-screen tap, hold 2x/release, vertical swipe, episode sheet, grouped settings and 320px overflow verified");
+  report.passed.push("Mobile 56px icon navigation, clean-screen tap, hold 2x/release, vertical swipe, episode sheet, grouped settings and 320px overflow verified");
 }

@@ -20,7 +20,9 @@ import "./plugins/shell.css";
 import "./plugins/legacy-adapter.css";
 import "./plugins/watch-experience.css";
 import "./plugins/refined-pages.css";
+import "./plugins/android-cinema.css";
 import ImmersiveHome from "./plugins/ImmersiveHome";
+import { IHome, IHomeF, ISearch, IGrid, IGridF, IUser, IUserF } from "./icons";
 import { runBack } from "./back";
 import { addPluginListener, invoke } from "@tauri-apps/api/core";
 export default function App() { return <HostProvider><Application/></HostProvider>; }
@@ -38,13 +40,13 @@ function Application() {
     else if(e.key==="/"){e.preventDefault();app.setTab("search");}
     else if(!e.repeat&&["1","2","3","4"].includes(e.key))app.setTab((["home","search","category","profile"] as Tab[])[Number(e.key)-1]);
   };window.addEventListener("keydown",fn);return()=>window.removeEventListener("keydown",fn);},[app.pop,app.setTab,app.fs]);
-  return <div className={`absolute inset-0 flex flex-col bg-canvas win-root plat-${app.platform}`} style={isMobile?{"--sat":"max(env(safe-area-inset-top), 12px)","--sab":"max(env(safe-area-inset-bottom), 16px)"} as React.CSSProperties:undefined}>
+  return <div className={`absolute inset-0 flex flex-col bg-canvas win-root plat-${app.platform}`} style={isMobile?{"--sat":"max(env(safe-area-inset-top), 12px)","--sab":"max(env(safe-area-inset-bottom), 16px)","--hg-tabbar-h":"56px"} as React.CSSProperties:undefined}>
     {!isMobile&&!app.watching&&<DesktopTitleBar collapsed={collapsed} onToggle={()=>setCollapsed(v=>!v)}/>}
     <div className="relative flex-1 min-h-0 flex">{!isMobile&&!app.theater&&!app.watching&&<DesktopRail collapsed={collapsed}/>}<main className={`relative flex-1 min-w-0 overflow-hidden win-main ${app.watching?"is-watching-main":app.theater?"is-theater-main":""}`}>
-      <div className="absolute inset-0" inert={app.tab!=="home"||!!top} hidden={app.tab!=="home"||!!top} style={{bottom:isMobile&&!top&&!app.fs&&!app.clean&&!app.watching?"calc(40px + var(--sab, 0px))":0}}>
+      <div className="absolute inset-0" inert={app.tab!=="home"||!!top} hidden={app.tab!=="home"||!!top} style={{bottom:isMobile&&!top&&!app.fs&&!app.clean&&!app.watching?"calc(var(--hg-tabbar-h, 56px) + var(--sab, 0px))":0}}>
         <ImmersiveHome active={app.tab==="home"&&!top} open={open} manage={manage} settings={()=>app.push({kind:"settings"})}/>
       </div>
-      <div className="absolute inset-0" inert={!!top} hidden={app.tab==="home"} style={{bottom:isMobile&&!top?"calc(40px + var(--sab, 0px))":0}}>{app.tab!=="home"&&(!top||top.kind==="media")&&(app.tab==="category"?<PluginCategory open={open} manage={manage} openContent={(kind,pluginId)=>app.push({kind,pluginId})}/>:app.tab==="search"?<PluginSearch open={open} manage={manage}/>:<LibraryPage open={open} manage={manage} settings={()=>app.push({kind:"settings"})}/>)}</div>
+      <div className="absolute inset-0" inert={!!top} hidden={app.tab==="home"} style={{bottom:isMobile&&!top?"calc(var(--hg-tabbar-h, 56px) + var(--sab, 0px))":0}}>{app.tab!=="home"&&(!top||top.kind==="media")&&(app.tab==="category"?<PluginCategory open={open} manage={manage} openContent={(kind,pluginId)=>app.push({kind,pluginId})}/>:app.tab==="search"?<PluginSearch open={open} manage={manage}/>:<LibraryPage open={open} manage={manage} settings={()=>app.push({kind:"settings"})}/>)}</div>
       {app.stack.map((page,i)=><div key={page.key} className={`absolute inset-0 ${page.kind==="media"?"":"bg-bg"} ${i===app.stack.length-1?"z-30":i===app.stack.length-2&&top?.kind==="media"&&!app.watching?"pointer-events-none":"invisible pointer-events-none"}`}>
         {page.kind==="plugins"?<Plugins onBack={app.pop} focusId={page.focusId}/>:page.kind==="settings"?<ApplicationSettings onBack={app.pop}/>:page.kind==="section"?<SectionRoute {...page} open={open} onBack={app.pop}/>:page.kind==="media"?<MediaPage pluginId={page.pluginId} mediaId={page.mediaId} start={page.start} onBack={app.pop} manage={manage} active={i===app.stack.length-1} onSwitch={(pluginId,mediaId,start)=>app.replace({kind:"media",pluginId,mediaId,start})}/>:<ContentRoute page={page} active={i===app.stack.length-1}/>}
       </div>)}
@@ -76,39 +78,35 @@ function MediaPage({pluginId,mediaId,onBack,manage,active,start,onSwitch}: {plug
 
 function TabBar() {
   const { tab, setTab, theme } = useStore();
-  const items: { k: Tab; label: string }[] = [
-    { k: "home", label: "首页" },
-    { k: "search", label: "搜索" },
-    { k: "category", label: "分类" },
-    { k: "profile", label: "我的" },
+  const items: { k: Tab; label: string; icon: typeof IHome; activeIcon: typeof IHome }[] = [
+    { k: "home", label: "首页", icon: IHome, activeIcon: IHomeF },
+    { k: "search", label: "搜索", icon: ISearch, activeIcon: ISearch },
+    { k: "category", label: "分类", icon: IGrid, activeIcon: IGridF },
+    { k: "profile", label: "我的", icon: IUser, activeIcon: IUserF },
   ];
-  /* 细瘦纯文字分栏：只有选中项高亮，没有指示点。
-     首页是沉浸视频 → 底栏压深色；搜索/分类/我的 是浅色内容页 →
-     浅色主题下底栏跟着换成浅色，深色主题保持深色。 */
   const overVideo = tab === "home";
   const lightBar = !overVideo && theme === "light";
+  const tone = overVideo ? "is-over-video" : lightBar ? "is-light" : "is-dark";
   return (
-    <nav className="hg-tabbar absolute bottom-0 inset-x-0 z-30"
-      style={{
-        paddingBottom: "var(--sab, 0px)",
-        background: lightBar ? "rgba(250, 250, 250, .97)" : overVideo ? "#000000" : "#141414",
-        borderTop: lightBar ? "1px solid rgba(0,0,0,.08)" : overVideo ? "none" : "1px solid rgba(255,255,255,.07)",
-        boxShadow: lightBar ? "0 -2px 14px rgba(0,0,0,.05)" : "none",
-      }}>
-      <div className="h-[40px] flex items-center px-1">
-        {items.map(({ k, label }) => {
+    <nav
+      className={`hg-tabbar absolute bottom-0 inset-x-0 z-30 ${tone}`}
+      style={{ paddingBottom: "var(--sab, 0px)" }}
+    >
+      <div className="hg-tabbar-inner">
+        {items.map(({ k, label, icon: Icon, activeIcon: ActiveIcon }) => {
           const on = tab === k;
+          const Glyph = on ? ActiveIcon : Icon;
           return (
-            <button key={k} onClick={() => setTab(k)} className="flex-1 h-full flex items-center justify-center pressable">
-              <span className="text-[12.5px] leading-none transition-colors duration-200"
-                style={{
-                  fontWeight: on ? 700 : 400,
-                  color: lightBar
-                    ? (on ? "var(--p-primary)" : "rgba(0,0,0,.45)")
-                    : (on ? "#ffffff" : "rgba(255,255,255,.6)"),
-                }}>
-                {label}
+            <button
+              key={k}
+              onClick={() => setTab(k)}
+              aria-current={on ? "page" : undefined}
+              className={`hg-tabbar-item pressable ${on ? "is-active" : ""}`}
+            >
+              <span className="hg-tabbar-pill">
+                <Glyph size={19} strokeWidth={on ? 2.25 : 1.85} />
               </span>
+              <span className="hg-tabbar-label">{label}</span>
             </button>
           );
         })}

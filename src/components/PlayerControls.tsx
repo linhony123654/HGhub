@@ -64,7 +64,13 @@ export default function PlayerControls({
         <input aria-label="播放进度" type="range" {...seek.inputProps} />
       </div>
 
-      {mobile ? <div className="hg-mobile-control-row"><button aria-label="锁定播放控制" onClick={onLock}><ILockF size={22}/></button><button aria-label="全屏" onClick={onFullscreen}><IExpand size={24}/></button></div> : <div className="desktop-control-row">
+      {mobile ? (
+        <div className="hg-mobile-control-row">
+          <span className="hg-mobile-time tabular-nums">{clock(seek.time)}<span> / {clock(duration)}</span></span>
+          <button aria-label="锁定播放控制" onClick={onLock}><ILockF size={20}/></button>
+          <button aria-label="全屏" onClick={onFullscreen}><IExpand size={21}/></button>
+        </div>
+      ) : <div className="desktop-control-row">
         {(onEpisodes || onPrevious) && <button className="player-control" aria-label="上一集" data-tooltip="上一集 PageUp" disabled={!onPrevious} onClick={onPrevious}><INext size={18} className="rotate-180"/></button>}
         <button className="player-control primary-play" aria-label={paused ? "播放" : "暂停"} data-tooltip={paused ? "播放 Space" : "暂停 Space"} onClick={onToggle}>
           {paused ? <IPlayF size={19} /> : <IPauseF size={18} />}

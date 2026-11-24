@@ -12,7 +12,7 @@ import PlaybackLock from "./PlaybackLock";
 import { registerBackHandler } from "../back";
 import { useVerticalSwipe } from './useVerticalSwipe';
 import type { PreparedMedia } from "../plugins/client";
-import { IMore, IHeart, IHeartF, IPip, IBack, IBoltF, IChevR, IChevronDown, IChevronUp, IClose, ICommentF, ICompress, IExpand, IList, ILockF, IPauseF, IPlayF, ISearch, ISettings, IVol, IVolMute } from "../icons";
+import { IMore, IHeart, IHeartF, IPip, IBack, IBoltF, IChevR, IChevronDown, IChevronUp, IClose, ICommentF, ICompress, IExpand, IInfo, IList, ILockF, IPauseF, IPlayF, ISearch, ISettings, IVol, IVolMute } from "../icons";
 
 export type PlayerPanel = "detail" | "episodes" | "comments" | "playback";
 type SurfacePanel = PlayerPanel | "more";
@@ -743,7 +743,7 @@ export default function Feed({media, position, active=true, preparing=false, err
 
               {/* 渐变压暗，保证文字可读（清屏模式下不加压暗遮罩，只显示纯视频内容） */}
               {preview && !fs && !clean && (
-                <div className="absolute inset-0 pointer-events-none"
+                <div className="absolute inset-0 pointer-events-none hg-preview-scrim"
                   style={{ background: "linear-gradient(0deg, rgba(8,11,15,.86) 0, rgba(11,14,20,.18) 26%, transparent 48%)" }} />
               )}
 
@@ -795,7 +795,7 @@ export default function Feed({media, position, active=true, preparing=false, err
                 <div className="hg-preview-actions">
                   <button aria-label={muted?"取消静音":"静音"} onClick={()=>setMuted(v=>!v)}><span>{muted?<IVolMute size={24}/>:<IVol size={24}/>}</span><small>{muted?"静音":"声音"}</small></button>
                   {onFavorite&&<button onClick={onFavorite} aria-label={favorite?"取消本地收藏":"本地收藏"} aria-pressed={favorite}><span>{favorite?<IHeartF size={25}/>:<IHeart size={25}/>}</span><small>{favorite?"已收藏":"收藏"}</small></button>}
-                  <button aria-label="作品详情" onClick={showDetails}><span className="hg-info-glyph">ⓘ</span><small>详情</small></button>
+                  <button aria-label="作品详情" onClick={showDetails}><span><IInfo size={23}/></span><small>详情</small></button>
                 </div>
                 <div className="hg-preview-copy"><h1>{title}</h1><div className="hg-preview-meta"><span>{author}</span>{score!==undefined&&<strong>评分 {score.toFixed(1)}</strong>}</div><button onClick={showDetails} className="hg-preview-synopsis"><span>{description || "发现下一部值得看的故事"}</span><b>展开</b></button></div>
                 <div className="hg-preview-footer"><button className="hg-preview-watch" onClick={showDetails}><IPlayF size={17}/><span>观看完整作品{episodeCount ? ` · 共 ${episodeCount} 集` : ""}</span><IChevR size={20}/></button>

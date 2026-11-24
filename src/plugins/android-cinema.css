@@ -1,0 +1,1483 @@
+/* ===================================================================
+   HGhub Android / Mobile — Modern Cinema Streaming Theme
+   Strictly scoped to mobile platforms (.plat-android, .plat-ios, .refined-mobile)
+   and mobile-only components (.hg-tabbar, .hg-mobile-controls) so desktop stays untouched.
+   =================================================================== */
+
+/* 1. Cinema Design Tokens (Dark Obsidian & Light Porcelain) */
+.plat-android,
+.plat-ios,
+.plat-android .refined-page,
+.plat-ios .refined-page,
+.refined-mobile {
+  --p-canvas: #080a0f;
+  --p-bg: #0d1017;
+  --p-s1: #151a24;
+  --p-s2: #1c2331;
+  --p-s3: #252e3f;
+  --p-s4: #323d52;
+  --p-on: #f5f7fb;
+  --p-mut: #a7b2c7;
+  --p-dim: #738099;
+  --p-primary: #4cc9ff;
+  --p-on-primary: #031e2e;
+  --p-pc: #133c55;
+  --p-on-pc: #cdefff;
+  --p-sec: #232b3b;
+  --p-on-sec: #f2f6fc;
+  --p-like: #ff5d84;
+  --p-star: #f4c860;
+  --p-success: #5cd67b;
+  --p-danger: #ff7b8a;
+  --p-on-danger: #3a0710;
+  --p-tint: rgba(76, 201, 255, 0.15);
+  --p-glow: rgba(76, 201, 255, 0.34);
+  --p-hover: rgba(255, 255, 255, 0.08);
+  --surface-border: rgba(255, 255, 255, 0.08);
+  --cinema-glass: rgba(13, 17, 25, 0.82);
+  --cinema-glass-strong: rgba(16, 21, 31, 0.92);
+  --cinema-glass-border: rgba(255, 255, 255, 0.11);
+  --cinema-shadow-card: 0 8px 24px rgba(0, 0, 0, 0.34), 0 1px 2px rgba(0, 0, 0, 0.22);
+  --cinema-shadow-poster: 0 10px 22px rgba(0, 0, 0, 0.44);
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-ctl: 999px;
+  --hg-tabbar-h: 56px;
+}
+
+html.theme-light .plat-android,
+html.theme-light .plat-ios,
+html.theme-light .plat-android .refined-page,
+html.theme-light .plat-ios .refined-page,
+html.theme-light .refined-mobile {
+  --p-canvas: #edf1f7;
+  --p-bg: #f4f6fa;
+  --p-s1: #ffffff;
+  --p-s2: #eef2f8;
+  --p-s3: #e3e9f2;
+  --p-s4: #cfd8e6;
+  --p-on: #0f172a;
+  --p-mut: #4b5870;
+  --p-dim: #7b88a1;
+  --p-primary: #0277d8;
+  --p-on-primary: #ffffff;
+  --p-pc: #d9eeff;
+  --p-on-pc: #003c6e;
+  --p-sec: #e6ecf5;
+  --p-on-sec: #0f172a;
+  --p-like: #e64566;
+  --p-star: #c2870a;
+  --p-success: #168a3e;
+  --p-danger: #d13438;
+  --p-on-danger: #ffffff;
+  --p-tint: rgba(2, 119, 216, 0.12);
+  --p-glow: rgba(2, 119, 216, 0.24);
+  --p-hover: rgba(15, 23, 42, 0.05);
+  --surface-border: rgba(15, 23, 42, 0.08);
+  --cinema-glass: rgba(255, 255, 255, 0.86);
+  --cinema-glass-strong: rgba(255, 255, 255, 0.94);
+  --cinema-glass-border: rgba(15, 23, 42, 0.08);
+  --cinema-shadow-card: 0 6px 20px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --cinema-shadow-poster: 0 8px 18px rgba(15, 23, 42, 0.13);
+}
+
+.plat-android .win-main,
+.plat-ios .win-main {
+  background: var(--p-bg);
+}
+
+.plat-android .refined-mobile,
+.plat-ios .refined-mobile {
+  overflow-x: hidden;
+}
+
+.plat-android .refined-mobile *,
+.plat-ios .refined-mobile * {
+  box-sizing: border-box;
+}
+
+/* 2. Frosted Glass Icon Bottom TabBar */
+.hg-tabbar {
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  transition: background-color 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.hg-tabbar.is-over-video {
+  background: linear-gradient(180deg, rgba(8, 10, 16, 0.88), rgba(6, 8, 12, 0.96));
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.hg-tabbar.is-dark {
+  background: rgba(12, 16, 24, 0.88);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.34);
+}
+
+.hg-tabbar.is-light {
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.hg-tabbar-inner {
+  height: var(--hg-tabbar-h, 56px);
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+}
+
+.hg-tabbar-item {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.hg-tabbar-pill {
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.22s ease, transform 0.22s cubic-bezier(0.2, 0, 0, 1), color 0.2s ease;
+}
+
+.hg-tabbar-label {
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: 0.15px;
+  font-weight: 500;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.hg-tabbar.is-over-video .hg-tabbar-item {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.hg-tabbar.is-over-video .hg-tabbar-item.is-active {
+  color: #ffffff;
+}
+
+.hg-tabbar.is-over-video .hg-tabbar-item.is-active .hg-tabbar-pill {
+  background: rgba(76, 201, 255, 0.2);
+  color: #79dcff;
+  box-shadow: inset 0 0 0 1px rgba(76, 201, 255, 0.26);
+}
+
+.hg-tabbar.is-dark .hg-tabbar-item,
+.hg-tabbar.is-light .hg-tabbar-item {
+  color: var(--p-dim);
+}
+
+.hg-tabbar.is-dark .hg-tabbar-item.is-active,
+.hg-tabbar.is-light .hg-tabbar-item.is-active {
+  color: var(--p-primary);
+}
+
+.hg-tabbar.is-dark .hg-tabbar-item.is-active .hg-tabbar-pill,
+.hg-tabbar.is-light .hg-tabbar-item.is-active .hg-tabbar-pill {
+  background: var(--p-tint);
+}
+
+.hg-tabbar-item.is-active .hg-tabbar-label {
+  font-weight: 650;
+}
+
+.hg-tabbar-item:active .hg-tabbar-pill {
+  transform: scale(0.92);
+}
+
+/* 3. Floating Banners Above TabBar */
+.plat-android .hpp-global-updates,
+.plat-ios .hpp-global-updates,
+.plat-android .hpp-global-auth,
+.plat-ios .hpp-global-auth {
+  left: 14px;
+  right: 14px;
+  bottom: calc(var(--hg-tabbar-h, 56px) + var(--sab, 0px) + 12px);
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--cinema-glass-strong);
+  color: var(--p-on);
+  border: 1px solid var(--cinema-glass-border);
+  box-shadow: var(--cinema-shadow-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.plat-android .win-main.is-watching-main .hpp-global-updates,
+.plat-ios .win-main.is-watching-main .hpp-global-updates {
+  display: none;
+}
+
+.plat-android .win-main:not(.is-watching-main):has(> div:not([hidden]) .mode-preview) .hpp-global-updates,
+.plat-ios .win-main:not(.is-watching-main):has(> div:not([hidden]) .mode-preview) .hpp-global-updates {
+  bottom: auto;
+  top: calc(var(--sat, 0px) + 60px);
+}
+
+.plat-android .hpp-global-updates button,
+.plat-ios .hpp-global-updates button,
+.plat-android .hpp-global-auth button,
+.plat-ios .hpp-global-auth button {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--p-tint);
+  color: var(--p-primary);
+}
+
+/* 4. Immersive Home Preview & Full Playback */
+.plat-android .hpp-immersive-home,
+.plat-ios .hpp-immersive-home {
+  background: #06080d;
+}
+
+.plat-android .hpp-home-empty,
+.plat-ios .hpp-home-empty {
+  background: radial-gradient(circle at 50% 34%, rgba(76, 201, 255, 0.2), transparent 58%);
+}
+
+.plat-android .hg-preview-scrim,
+.plat-ios .hg-preview-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(5, 7, 12, 0.56) 0%,
+    rgba(5, 7, 12, 0.14) 22%,
+    transparent 44%,
+    rgba(5, 7, 12, 0.42) 70%,
+    rgba(5, 7, 12, 0.92) 100%
+  ) !important;
+}
+
+.plat-android .hg-preview-heading,
+.plat-ios .hg-preview-heading {
+  padding: calc(var(--sat, 0px) + 14px) 16px 18px;
+  background: linear-gradient(180deg, rgba(6, 8, 14, 0.62), transparent);
+}
+
+.plat-android .hg-preview-selected,
+.plat-ios .hg-preview-selected {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.plat-android .hg-preview-selected::after,
+.plat-ios .hg-preview-selected::after {
+  bottom: -9px;
+  left: calc(50% - 11px);
+  width: 22px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4cc9ff, #9ce5ff);
+  box-shadow: 0 0 10px rgba(76, 201, 255, 0.6);
+}
+
+.plat-android .hg-preview-heading > button,
+.plat-ios .hg-preview-heading > button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(14, 19, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffffff;
+}
+
+.plat-android .hg-preview-actions,
+.plat-ios .hg-preview-actions {
+  right: 14px;
+  bottom: 120px;
+  gap: 16px;
+}
+
+.plat-android .hg-preview-actions button > span,
+.plat-ios .hg-preview-actions button > span {
+  width: 46px;
+  height: 46px;
+  background: rgba(14, 18, 28, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+  transition: transform 0.18s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.plat-android .hg-preview-actions button[aria-pressed="true"] > span,
+.plat-ios .hg-preview-actions button[aria-pressed="true"] > span {
+  background: rgba(255, 93, 132, 0.22);
+  border-color: rgba(255, 93, 132, 0.45);
+  color: #ff6b91;
+}
+
+.plat-android .hg-preview-actions button:active > span,
+.plat-ios .hg-preview-actions button:active > span {
+  transform: scale(0.92);
+}
+
+.plat-android .hg-preview-actions small,
+.plat-ios .hg-preview-actions small {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
+}
+
+.plat-android .hg-preview-copy,
+.plat-ios .hg-preview-copy {
+  left: 16px;
+  right: 78px;
+  bottom: 114px;
+}
+
+.plat-android .hg-preview-copy h1,
+.plat-ios .hg-preview-copy h1 {
+  font-size: 21px;
+  line-height: 1.32;
+  font-weight: 750;
+  letter-spacing: -0.2px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.65);
+}
+
+.plat-android .hg-preview-meta,
+.plat-ios .hg-preview-meta {
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.plat-android .hg-preview-meta strong,
+.plat-ios .hg-preview-meta strong {
+  color: #ffd97d;
+  background: rgba(244, 200, 96, 0.18);
+  border: 1px solid rgba(244, 200, 96, 0.35);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 11px;
+}
+
+.plat-android .hg-preview-synopsis,
+.plat-ios .hg-preview-synopsis {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.plat-android .hg-preview-synopsis b,
+.plat-ios .hg-preview-synopsis b {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.plat-android .hg-preview-footer,
+.plat-ios .hg-preview-footer {
+  padding: 8px 18px 8px;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, rgba(20, 26, 38, 0.88), rgba(11, 15, 23, 0.96));
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.42);
+}
+
+.plat-android .hg-preview-watch,
+.plat-ios .hg-preview-watch {
+  min-height: 44px;
+  font-size: 14.5px;
+  font-weight: 650;
+  gap: 10px;
+}
+
+.plat-android .hg-preview-watch > svg:first-child,
+.plat-ios .hg-preview-watch > svg:first-child {
+  color: #4cc9ff;
+  filter: drop-shadow(0 0 8px rgba(76, 201, 255, 0.5));
+}
+
+.plat-android .hg-preview-footer input,
+.plat-ios .hg-preview-footer input {
+  height: 24px;
+}
+
+.plat-android .hg-preview-footer input::-webkit-slider-runnable-track,
+.plat-ios .hg-preview-footer input::-webkit-slider-runnable-track {
+  height: 3.5px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #4cc9ff 0%,
+    #b6ecff var(--progress),
+    rgba(255, 255, 255, 0.22) var(--progress)
+  );
+}
+
+.plat-android .hg-preview-footer input::-webkit-slider-thumb,
+.plat-ios .hg-preview-footer input::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -3.25px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(76, 201, 255, 0.85);
+}
+
+/* Full Playback Overlay & Controls */
+.plat-android .hg-watch-heading,
+.plat-ios .hg-watch-heading {
+  padding: calc(var(--sat, 0px) + 12px) 14px 32px;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(5, 7, 12, 0.78), transparent);
+}
+
+.plat-android .hg-watch-heading > button,
+.plat-ios .hg-watch-heading > button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(14, 18, 28, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffffff;
+}
+
+.plat-android .hg-watch-title h1,
+.plat-ios .hg-watch-title h1 {
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
+.plat-android .hg-watch-title p,
+.plat-ios .hg-watch-title p {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 2px;
+}
+
+.plat-android .mode-full .desktop-controls,
+.plat-ios .mode-full .desktop-controls {
+  padding: 28px 16px calc(var(--sab, 0px) + 14px);
+  background: linear-gradient(0deg, rgba(5, 7, 12, 0.9) 0%, rgba(5, 7, 12, 0.52) 60%, transparent 100%);
+}
+
+.hg-mobile-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.hg-mobile-controls .desktop-seek {
+  width: 100%;
+  flex: none;
+  height: 24px;
+}
+
+.hg-mobile-controls .desktop-seek-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.hg-mobile-controls .desktop-seek-played {
+  background: linear-gradient(90deg, #3bb8f5, #9ce5ff);
+  box-shadow: 0 0 10px rgba(76, 201, 255, 0.45);
+}
+
+.hg-mobile-control-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hg-mobile-time {
+  margin-right: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.2px;
+}
+
+.hg-mobile-time > span {
+  color: rgba(255, 255, 255, 0.52);
+  font-weight: 400;
+}
+
+.hg-mobile-control-row button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(14, 18, 28, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+}
+
+/* Mobile Player Sheet & More Menu */
+.plat-android .hg-player-sheet,
+.plat-ios .hg-player-sheet {
+  max-height: calc(100dvh - var(--hg-tabbar-h, 56px) - var(--sab, 0px));
+}
+
+.plat-android .legacy-panel-heading,
+.plat-ios .legacy-panel-heading {
+  padding: 12px 18px 14px;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.plat-android .legacy-panel-heading h2,
+.plat-ios .legacy-panel-heading h2 {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.plat-android .legacy-panel-heading > button,
+.plat-ios .legacy-panel-heading > button {
+  width: 34px;
+  height: 34px;
+  background: var(--p-s3);
+  color: var(--p-on);
+}
+
+.plat-android .hg-more-shortcuts button,
+.plat-ios .hg-more-shortcuts button {
+  border-radius: 14px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  color: var(--p-on);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.plat-android .hg-more-shortcuts button[aria-pressed="true"],
+.plat-ios .hg-more-shortcuts button[aria-pressed="true"] {
+  background: var(--p-tint);
+  border-color: color-mix(in srgb, var(--p-primary) 40%, transparent);
+  color: var(--p-primary);
+}
+
+.plat-android .hg-more-menu > label,
+.plat-ios .hg-more-menu > label {
+  border-bottom: 1px solid var(--surface-border);
+  font-size: 14px;
+}
+
+.plat-android .hg-more-menu > button,
+.plat-ios .hg-more-menu > button {
+  border-radius: 12px;
+  padding: 0 12px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+}
+
+/* 5. Media Detail Bottom Sheet */
+.plat-android .hg-detail-sheet,
+.plat-ios .hg-detail-sheet {
+  inset: auto 0 0;
+  width: 100%;
+  max-width: 100%;
+  height: min(86dvh, 840px);
+  border-radius: 26px 26px 0 0;
+  border: 0;
+  border-top: 1px solid var(--cinema-glass-border);
+  background: var(--p-bg);
+  color: var(--p-on);
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.56);
+}
+
+.plat-android .hg-detail-sheet::backdrop,
+.plat-ios .hg-detail-sheet::backdrop {
+  background: rgba(4, 6, 12, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.plat-android .hg-sheet-handle,
+.plat-ios .hg-sheet-handle {
+  display: block;
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--p-s4);
+  margin: 10px auto 0;
+}
+
+.plat-android .hg-detail-heading,
+.plat-ios .hg-detail-heading {
+  padding: 14px 20px 16px;
+}
+
+.plat-android .hg-detail-heading h2,
+.plat-ios .hg-detail-heading h2 {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.plat-android .hg-detail-heading button,
+.plat-ios .hg-detail-heading button {
+  width: 38px;
+  height: 38px;
+  background: var(--p-s2);
+  border: 1px solid var(--surface-border);
+  color: var(--p-mut);
+}
+
+.plat-android .hg-detail-heading button[aria-pressed="true"],
+.plat-ios .hg-detail-heading button[aria-pressed="true"] {
+  color: var(--p-star);
+  background: color-mix(in srgb, var(--p-star) 15%, transparent);
+  border-color: color-mix(in srgb, var(--p-star) 38%, transparent);
+}
+
+.plat-android .hg-detail-scroll,
+.plat-ios .hg-detail-scroll {
+  padding: 0 20px 16px;
+}
+
+.plat-android .hg-detail-cover,
+.plat-ios .hg-detail-cover {
+  width: 98px;
+  border-radius: 14px;
+  box-shadow: var(--cinema-shadow-poster);
+  border: 1px solid var(--surface-border);
+}
+
+.plat-android .hg-detail-hero h1,
+.plat-ios .hg-detail-hero h1 {
+  font-size: 20px;
+  line-height: 1.32;
+  margin-bottom: 6px;
+}
+
+.plat-android .hg-detail-score,
+.plat-ios .hg-detail-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--p-star);
+  background: color-mix(in srgb, var(--p-star) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--p-star) 32%, transparent);
+  margin-bottom: 10px;
+}
+
+.plat-android .hg-detail-tags span,
+.plat-ios .hg-detail-tags span {
+  background: var(--p-s2);
+  border: 1px solid var(--surface-border);
+  color: var(--p-mut);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.plat-android .hg-synopsis,
+.plat-ios .hg-synopsis {
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+
+.plat-android .hg-synopsis button,
+.plat-ios .hg-synopsis button {
+  color: var(--p-primary);
+  font-weight: 600;
+}
+
+.plat-android .hg-episode-picker .hpp-playlists button,
+.plat-ios .hg-episode-picker .hpp-playlists button {
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: var(--p-s2);
+  border: 1px solid var(--surface-border);
+  color: var(--p-mut);
+}
+
+.plat-android .hg-episode-picker .hpp-playlists button.selected,
+.plat-ios .hg-episode-picker .hpp-playlists button.selected {
+  background: var(--p-tint);
+  border-color: color-mix(in srgb, var(--p-primary) 45%, transparent);
+  color: var(--p-primary);
+  font-weight: 600;
+}
+
+.plat-android .hg-episode-ranges button,
+.plat-ios .hg-episode-ranges button {
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  font-size: 12px;
+}
+
+.plat-android .hg-episode-ranges button[aria-pressed="true"],
+.plat-ios .hg-episode-ranges button[aria-pressed="true"] {
+  background: var(--p-tint);
+  border-color: color-mix(in srgb, var(--p-primary) 45%, transparent);
+  color: var(--p-primary);
+}
+
+.plat-android .hg-episode-picker .hpp-episodes,
+.plat-ios .hg-episode-picker .hpp-episodes {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.plat-android .hg-episode-picker .hpp-episodes button,
+.plat-ios .hg-episode-picker .hpp-episodes button {
+  min-height: 46px;
+  border-radius: 12px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--p-on);
+}
+
+.plat-android .hg-episode-picker .hpp-episodes button.selected,
+.plat-ios .hg-episode-picker .hpp-episodes button.selected {
+  background: var(--p-tint);
+  border-color: color-mix(in srgb, var(--p-primary) 55%, transparent);
+  color: var(--p-primary);
+  box-shadow: 0 4px 12px var(--p-tint);
+}
+
+.plat-android .hg-detail-secondary > button,
+.plat-ios .hg-detail-secondary > button,
+.plat-android .hg-detail-secondary details > button,
+.plat-ios .hg-detail-secondary details > button {
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  color: var(--p-on);
+  font-weight: 500;
+}
+
+.plat-android .hg-detail-secondary > button[aria-pressed="true"],
+.plat-ios .hg-detail-secondary > button[aria-pressed="true"] {
+  background: var(--p-tint);
+  color: var(--p-primary);
+  border-color: color-mix(in srgb, var(--p-primary) 45%, transparent);
+}
+
+.plat-android .hg-detail-sheet footer,
+.plat-ios .hg-detail-sheet footer {
+  padding: 12px 20px max(16px, var(--sab, env(safe-area-inset-bottom)));
+  background: color-mix(in srgb, var(--p-bg) 96%, transparent);
+  border-top: 1px solid var(--surface-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.plat-android .hg-watch-action,
+.plat-ios .hg-watch-action {
+  min-height: 50px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--p-primary), color-mix(in srgb, var(--p-primary) 72%, #1d4ed8));
+  color: var(--p-on-primary);
+  box-shadow: 0 8px 24px var(--p-glow);
+  font-weight: 700;
+}
+
+/* 6. Shared Mobile Page Header & Card Surfaces */
+.refined-mobile > header h1 {
+  font-size: 25px;
+  line-height: 30px;
+  font-weight: 750;
+  letter-spacing: -0.35px;
+}
+
+.refined-mobile > header > button,
+.refined-mobile.hpp-library-page .library-settings {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  color: var(--p-on);
+  box-shadow: var(--cinema-shadow-card);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refined-mobile .hpp-poster {
+  border-radius: 12px;
+  box-shadow: var(--cinema-shadow-poster);
+  background: linear-gradient(155deg, var(--p-s2), var(--p-s1));
+}
+
+.refined-mobile .hpp-poster small {
+  background: rgba(10, 14, 22, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+/* 7. Search Page */
+.refined-mobile.refined-search .refined-search-console {
+  padding: calc(var(--sat, 0px) + 12px) 16px 8px !important;
+}
+
+.refined-mobile.refined-search .legacy-search-form {
+  height: 46px;
+  border-radius: 16px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  padding: 0 14px;
+}
+
+.refined-mobile.refined-search .legacy-search-form:focus-within {
+  border-color: color-mix(in srgb, var(--p-primary) 55%, transparent);
+  box-shadow: 0 0 0 3px var(--p-tint), var(--cinema-shadow-card);
+  outline: none;
+}
+
+.refined-mobile .search-scope-trigger {
+  min-height: 32px;
+  margin: 2px 16px 8px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  font-size: 12.5px;
+  color: var(--p-mut);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.refined-mobile .search-scope-trigger svg:first-child {
+  color: var(--p-primary);
+}
+
+.refined-mobile.refined-search .refined-search-recents > section {
+  padding: 14px;
+  margin: 4px 0 16px;
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile.refined-search .refined-search-recents button {
+  border-radius: 999px;
+}
+
+.refined-mobile.refined-search .refined-search-recents section button:not(.text-dim) {
+  background: var(--p-s2);
+  border: 1px solid var(--surface-border);
+  color: var(--p-on);
+}
+
+.refined-mobile .refined-source-list {
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  padding: 4px;
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile .refined-source-row {
+  padding: 10px 12px;
+  min-height: 58px;
+}
+
+.refined-mobile .refined-glyph {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+}
+
+.refined-mobile.refined-search .legacy-search-tabs {
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+.refined-mobile.refined-search .legacy-search-tabs button {
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 550;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  color: var(--p-mut);
+}
+
+.refined-mobile.refined-search .legacy-search-tabs button.selected {
+  background: var(--p-primary);
+  border-color: transparent;
+  color: var(--p-on-primary);
+  box-shadow: 0 4px 12px var(--p-glow);
+}
+
+.refined-mobile.refined-search .legacy-search-grid {
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  padding: 4px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.refined-mobile.refined-search .legacy-search-poster {
+  padding: 12px;
+  gap: 12px;
+  border-radius: 14px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.refined-mobile.refined-search .legacy-search-poster > div:first-child {
+  width: 64px;
+  border-radius: 11px;
+  box-shadow: var(--cinema-shadow-poster);
+}
+
+.refined-mobile.refined-search .search-result-badges span {
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+}
+
+.refined-mobile.refined-search .legacy-search-options {
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+}
+
+/* 8. Category Page */
+.refined-mobile.hpp-category-page > header {
+  padding: calc(var(--sat, 0px) + 12px) 16px 8px !important;
+  min-height: 0;
+}
+
+.refined-mobile.hpp-category-page > .hpp-provider-tabs {
+  padding: 4px 16px 10px;
+  gap: 8px;
+  min-height: 48px;
+}
+
+.refined-mobile.hpp-category-page > .hpp-provider-tabs button {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  color: var(--p-mut);
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.refined-mobile.hpp-category-page > .hpp-provider-tabs button[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--p-primary), color-mix(in srgb, var(--p-primary) 75%, #1d4ed8));
+  border-color: transparent;
+  color: var(--p-on-primary);
+  box-shadow: 0 4px 14px var(--p-glow);
+  font-weight: 650;
+}
+
+.refined-mobile.hpp-category-page > .hpp-provider-tabs button[aria-pressed="true"] .category-source-glyph {
+  background: rgba(255, 255, 255, 0.24);
+  color: var(--p-on-primary);
+}
+
+.refined-mobile .category-source-glyph {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.refined-mobile .hpp-content-entries {
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.refined-mobile .hpp-content-entries button {
+  height: 58px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile .category-entry-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--p-tint);
+  color: var(--p-primary);
+}
+
+.refined-mobile .legacy-category-heading > span:first-child {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--p-tint);
+  color: var(--p-primary);
+}
+
+.refined-mobile .legacy-category-heading > span:last-child {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  font-size: 11px;
+  color: var(--p-mut);
+}
+
+.refined-mobile .hpp-preview-strip {
+  gap: 12px;
+  padding-bottom: 6px;
+}
+
+.refined-mobile .hpp-page button.legacy-row-card {
+  flex: 0 0 116px;
+  width: 116px;
+}
+
+.refined-mobile .legacy-row-card > div:first-child {
+  border-radius: 13px;
+  box-shadow: var(--cinema-shadow-poster);
+  border: 1px solid var(--surface-border);
+}
+
+.refined-mobile .legacy-row-card .brand-grad {
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 9px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.refined-mobile .hpp-cards {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 10px;
+}
+
+@media (max-width: 350px) {
+  .refined-mobile .hpp-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.refined-mobile .hpp-category-tree,
+.refined-mobile .browse-filters {
+  border-radius: 16px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile .browse-filters label,
+.refined-mobile .browse-filters button,
+.refined-mobile .hpp-category-tree button {
+  border-radius: 999px;
+}
+
+/* 9. Library / "我的" Page */
+.refined-mobile.hpp-library-page > .hpp-library-tabs {
+  margin: 4px 16px 8px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--p-s2);
+  border: 1px solid var(--surface-border);
+  gap: 4px;
+}
+
+.refined-mobile.hpp-library-page > .hpp-library-tabs button {
+  height: 34px;
+  min-height: 34px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--p-mut);
+}
+
+.refined-mobile.hpp-library-page > .hpp-library-tabs button[aria-pressed="true"] {
+  background: var(--p-s1);
+  color: var(--p-on);
+  font-weight: 650;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+.refined-mobile.hpp-library-page > .hpp-library-tabs button[aria-pressed="true"] svg {
+  color: var(--p-primary);
+}
+
+.refined-mobile .library-plugin-entry {
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: linear-gradient(125deg, color-mix(in srgb, var(--p-primary) 10%, var(--p-s1)), var(--p-s1) 62%);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile .library-plugin-entry .library-plugin-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--p-tint);
+  color: var(--p-primary);
+}
+
+.refined-mobile .library-update-badge {
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 650;
+  background: var(--p-tint);
+  color: var(--p-primary);
+  border: 1px solid color-mix(in srgb, var(--p-primary) 35%, transparent);
+}
+
+.refined-mobile .library-control-bar {
+  padding: 14px 0 12px;
+}
+
+.refined-mobile .hpp-library-toolbar button {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  font-size: 12px;
+  color: var(--p-mut);
+}
+
+.refined-mobile .hpp-library-toolbar button[aria-pressed="true"] {
+  background: var(--p-tint);
+  border-color: color-mix(in srgb, var(--p-primary) 45%, transparent);
+  color: var(--p-primary);
+  font-weight: 600;
+}
+
+.refined-mobile .hpp-local-entry .hpp-poster progress {
+  height: 3.5px;
+}
+
+.refined-mobile .hpp-local-entry .hpp-poster progress::-webkit-progress-bar {
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.refined-mobile .hpp-local-entry .hpp-poster progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--p-primary), #9ce5ff);
+}
+
+.refined-mobile .hpp-local-entry h3 {
+  padding-right: 26px;
+}
+
+.refined-mobile .hpp-local-entry summary {
+  right: -2px;
+  color: var(--p-dim);
+}
+
+.refined-mobile .hpp-local-entry details[open] {
+  position: relative;
+  z-index: 12;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 8px;
+  margin-top: 4px;
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile .library-history {
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  padding: 4px;
+}
+
+.refined-mobile .library-history .hpp-local-entry {
+  padding: 12px 12px 12px 78px;
+  min-height: 98px;
+}
+
+.refined-mobile .library-history .hpp-poster {
+  width: 54px;
+  border-radius: 10px;
+}
+
+/* 10. Plugin Center Page */
+.refined-mobile.hpp-plugins-page > .hpp-provider-tabs {
+  padding: 4px 16px 8px;
+}
+
+.refined-mobile.hpp-plugins-page .plugin-management-segments {
+  height: 40px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--p-s2);
+  border: 1px solid var(--surface-border);
+  gap: 4px;
+}
+
+.refined-mobile.hpp-plugins-page .plugin-management-segments button {
+  height: 100%;
+  min-height: 0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--p-mut);
+}
+
+.refined-mobile.hpp-plugins-page .plugin-management-segments button[aria-pressed="true"] {
+  background: var(--p-s1);
+  color: var(--p-on);
+  font-weight: 650;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+.refined-mobile.hpp-plugins-page .hpp-installed {
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  padding: 4px;
+  overflow: hidden;
+}
+
+.refined-mobile.hpp-plugins-page .hpp-plugin + .hpp-plugin::before {
+  left: 66px;
+  right: 14px;
+}
+
+.refined-mobile.hpp-plugins-page .plugin-select .hpp-plugin-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2b6cb0, #4cc9ff);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.refined-mobile.hpp-plugins-page .hpp-plugin:nth-child(4n + 2) .hpp-plugin-icon {
+  background: linear-gradient(135deg, #1b8a83, #38d9c0);
+}
+
+.refined-mobile.hpp-plugins-page .hpp-plugin:nth-child(4n + 3) .hpp-plugin-icon {
+  background: linear-gradient(135deg, #6d38b5, #a774f2);
+}
+
+.refined-mobile.hpp-plugins-page .hpp-plugin:nth-child(4n) .hpp-plugin-icon {
+  background: linear-gradient(135deg, #ad3368, #f46696);
+}
+
+.refined-mobile.hpp-plugins-page .plugin-enable-switch {
+  width: 44px;
+  height: 26px;
+  min-height: 26px;
+  border-radius: 999px;
+  margin-right: 4px;
+  background: var(--p-s4);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.refined-mobile.hpp-plugins-page .plugin-enable-switch span {
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.refined-mobile.hpp-plugins-page .plugin-enable-switch[aria-checked="true"] {
+  background: var(--p-primary);
+  box-shadow: 0 0 12px var(--p-glow);
+}
+
+.refined-mobile.hpp-plugins-page .plugin-enable-switch[aria-checked="true"] span {
+  transform: translateX(18px);
+  background: #ffffff;
+}
+
+.refined-mobile.hpp-plugins-page .plugin-overview,
+.refined-mobile.hpp-plugins-page .hpp-forms :is(.hpp-account, .hpp-actions),
+.refined-mobile.hpp-plugins-page .plugin-maintenance,
+.refined-mobile.hpp-plugins-page .hpp-setting,
+.refined-mobile.hpp-plugins-page .plugin-distribution-grid > section {
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+}
+
+.refined-mobile.hpp-plugins-page .hpp-distribution-location button,
+.refined-mobile.hpp-plugins-page .plugin-local-import button.primary {
+  border-radius: 14px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--p-primary), color-mix(in srgb, var(--p-primary) 75%, #1d4ed8));
+  color: var(--p-on-primary);
+  font-weight: 650;
+  box-shadow: 0 6px 18px var(--p-glow);
+}
+
+/* 11. Settings Page & Dialogs */
+.refined-mobile.legacy-settings > div:first-child {
+  background: var(--p-bg);
+}
+
+.refined-mobile.legacy-settings > div:first-child > div:first-child {
+  display: block;
+  opacity: 0.24;
+}
+
+.refined-mobile.legacy-settings > div:first-child > div:last-child {
+  padding: calc(var(--sat, 0px) + 12px) 16px 14px;
+}
+
+.refined-mobile.legacy-settings > div:first-child button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  margin-right: 10px;
+}
+
+.refined-mobile.legacy-settings > div:first-child span.w-9 {
+  display: none;
+}
+
+.refined-mobile.legacy-settings > div:first-child h1 {
+  font-size: 25px;
+  line-height: 30px;
+  font-weight: 750;
+  letter-spacing: -0.35px;
+}
+
+.refined-mobile .refined-settings-group > h2 {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--p-dim);
+  margin: 0 6px 8px;
+}
+
+.refined-mobile .refined-settings-group > section {
+  border-radius: 18px;
+  background: var(--p-s1);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--cinema-shadow-card);
+  padding: 4px;
+}
+
+.refined-mobile .refined-settings-group section .w-8.h-8.rounded-full,
+.plat-android .hg-proxy-icon,
+.plat-ios .hg-proxy-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--p-tint);
+  color: var(--p-primary);
+}
+
+.refined-mobile .refined-settings-group section button.rounded-full {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px !important;
+  background: var(--p-s4);
+}
+
+.refined-mobile .refined-settings-group section button.rounded-full[aria-pressed="true"] {
+  background: var(--p-primary);
+  box-shadow: 0 0 12px var(--p-glow);
+}
+
+.refined-mobile .refined-settings-group section button.rounded-full > span.rounded-full {
+  width: 20px;
+  height: 20px;
+  top: 3px;
+  left: 3px;
+  border-radius: 999px !important;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28);
+}
+
+.refined-mobile .refined-settings-group section button.rounded-full[aria-pressed="true"] > span.rounded-full {
+  left: 21px;
+  background: #ffffff;
+}
+
+.refined-mobile .refined-settings-group section .text-\[12\.5px\],
+.plat-android .hg-proxy-setting b,
+.plat-ios .hg-proxy-setting b {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--p-on);
+}
+
+.refined-mobile .refined-settings-group section .text-\[10\.5px\],
+.plat-android .hg-proxy-setting small,
+.plat-ios .hg-proxy-setting small {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--p-dim);
+  margin-top: 2px;
+}
+
+.plat-android .hpp-source-picker,
+.plat-ios .hpp-source-picker,
+.plat-android .hg-proxy-dialog,
+.plat-ios .hg-proxy-dialog {
+  background: var(--p-bg);
+  color: var(--p-on);
+  border: 1px solid var(--cinema-glass-border);
+  border-radius: 24px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+
+.plat-android .hpp-source-picker button.primary,
+.plat-ios .hpp-source-picker button.primary {
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--p-primary), color-mix(in srgb, var(--p-primary) 75%, #1d4ed8));
+  color: var(--p-on-primary);
+  font-weight: 650;
+}
